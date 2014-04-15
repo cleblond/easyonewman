@@ -24,6 +24,11 @@
     vertical-align: top;
 }
 
+
+#newman_template {
+overflow: hidden; padding: 10px;
+}
+
 .dragdiv {
 position: absolute;
 cursor: move;
