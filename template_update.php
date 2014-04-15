@@ -1,8 +1,5 @@
 <?
 
-
-
-
 require_once(dirname(__FILE__) . '/../../../config.php');
 //require_once('renderer.php');
 
@@ -18,8 +15,5 @@ $easyonewmanbuildstring=file_get_contents('edit_newman_eclip.html').file_get_con
 $easyonewmanbuildstring=file_get_contents('edit_newman.html').file_get_contents('newman_dragable.html');
 	}
 echo $easyonewmanbuildstring;
-
-
-
 
 ?>

@@ -19,53 +19,42 @@
  *
  * @package    qtype
  * @subpackage easyonewman
- * @copyright  2009 The Open University
+ * @copyright  2014 onwards Carl LeBlond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
 defined('MOODLE_INTERNAL') || die();
 
-
-/**
- * Generates the output for easyonewman questions.
- *
- * @copyright  2009 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class qtype_easyonewman_renderer extends qtype_renderer {
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
-		global $CFG, $PAGE;
-		
+        global $CFG, $PAGE;
+
         $question = $qa->get_question();
-	$stagoreclip=$question->stagoreclip;
-		$questiontext = $question->format_questiontext($qa);
+        $stagoreclip = $question->stagoreclip;
+        $questiontext = $question->format_questiontext($qa);
         $placeholder = false;
-	$myanswer_id = "my_answer".$qa->get_slot();
-	$correctanswer_id = "correct_answer".$qa->get_slot();
+        $myanswer_id = "my_answer".$qa->get_slot();
+        $correctanswer_id = "correct_answer".$qa->get_slot();
 
         if (preg_match('/_____+/', $questiontext, $matches)) {
             $placeholder = $matches[0];
         }
-	
-	$result='';
-	if ($options->readonly) {
-	
-	$name2 = 'easyonewman'.$qa->get_slot();
-	$result .= html_writer::tag('input', '', array('type' => 'button', 'id' => 'myresponse'.$qa->get_slot(), 'value' => 'Show My Response'));
-	$result .= html_writer::tag('input', '', array('type' => 'button', 'id' => 'correctanswer'.$qa->get_slot(), 'value' => 'Show Correct Answer'));
-	$result .= html_writer::tag('BR', '', array());
-	
-	}
+        
+        $result='';
+        if ($options->readonly) {
+            $name2 = 'easyonewman'.$qa->get_slot();
+            $result .= html_writer::tag('input', '', array('type' => 'button', 'id' => 'myresponse'.$qa->get_slot(), 'value' => 'Show My Response'));
+            $result .= html_writer::tag('input', '', array('type' => 'button', 'id' => 'correctanswer'.$qa->get_slot(), 'value' => 'Show Correct Answer'));
+            $result .= html_writer::tag('BR', '', array());
+        
+        }
 
         $toreplaceid = 'applet'.$qa->get_slot();
-       /* $toreplace = html_writer::tag('span',
-                                      get_string('enablejavaandjavascript', 'qtype_easyonewman'),
-                                      array('id' => $toreplaceid)); */
 
         if ($placeholder) {
-	
+        
             $toreplace = html_writer::tag('span',
                                       get_string('enablejavaandjavascript', 'qtype_easyonewman'),
                                       array('class' => 'ablock'));
@@ -77,139 +66,165 @@ class qtype_easyonewman_renderer extends qtype_renderer {
 
         $result .= html_writer::tag('div', $questiontext, array('class' => 'qtext'));
 
-
-
-/////crl
-//$result .= html_writer::tag('textarea', "every page here");
-
-	
-    /*    if (!$placeholder) {
-            $answerlabel = html_writer::tag('span', get_string('answer', 'qtype_easyonewman', ''),
-                                            array('class' => 'answerlabel'));
-            $result .= html_writer::tag('div', $answerlabel.$toreplace, array('class' => 'ablock'));
-
-
-        }*/
-	
         if ($qa->get_state() == question_state::$invalid) {
             $lastresponse = $this->get_last_response($qa);
             $result .= html_writer::nonempty_tag('div',
                                                 $question->get_validation_error($lastresponse),
                                                 array('class' => 'validationerror'));
  
-	
+        
        }
-	
+        
 
-		/////read structure into divs
-		if ($options->readonly) {
-		    //$currentanswer = $qa->get_last_qt_var('answer');
-
-
-		$jsmodule = array(
+                /////read structure into divs
+       if ($options->readonly) {
+            $jsmodule = array(
             'name'     => 'qtype_easyonewman',
             'fullpath' => '/question/type/easyonewman/module.js',
             'requires' => array(),
             'strings' => array(
                 array('enablejava', 'qtype_easyonewman')
             )
-        );
+            );
 
-	$moodleroot = $CFG->wwwroot;
-	$PAGE->requires->js_init_call('M.qtype_easyonewman2.insert_structure_into_applet',
-                                      array($qa->get_slot(), $moodleroot),		
+            $moodleroot = $CFG->wwwroot;
+            $PAGE->requires->js_init_call('M.qtype_easyonewman2.insert_structure_into_applet',
+                                      array($qa->get_slot(), $moodleroot, $stagoreclip),                
                                       true,
                                       $jsmodule);
 
+            $this->page->requires->js_init_call('M.qtype_easyonewman.init_showmyresponse', array($CFG->version, $qa->get_slot(), $moodleroot, $stagoreclip));
 
-$this->page->requires->js_init_call('M.qtype_easyonewman.init_showmyresponse', array($CFG->version, $qa->get_slot(), $moodleroot));
+            $this->page->requires->js_init_call('M.qtype_easyonewman.init_showcorrectanswer', array($CFG->version, $qa->get_slot(), $moodleroot, $stagoreclip));
+        
+            $result .= html_writer::tag('div', get_string('youranswer', 'qtype_easyonewman', ''), array('class' => 'qtext'));
 
-$this->page->requires->js_init_call('M.qtype_easyonewman.init_showcorrectanswer', array($CFG->version, $qa->get_slot(), $moodleroot));
+            $answer = $question->get_correct_response();
 
+            // Buttons to show correct and user answers!
+            $result .= html_writer::tag('textarea', $qa->get_last_qt_var('answer'), array('id' => $myanswer_id, 'name' => 'my_answer', 'style' => 'display:none;'));
 
+            $result .= html_writer::tag('textarea', $answer['answer'], array('id' => $correctanswer_id, 'name' => 'correct_answer', 'style' => 'display:none;'));
 
-
-
-		    //echo "current_answer".$currentanswer;
-		//$stripped_answer_id="stripped_answer".$qa->get_slot();
-		//$result .= html_writer::tag('textarea', $currentanswer, array('id' => $stripped_answer_id, 'style' => 'display:none;','name' => $stripped_answer_id));
-
-//		echo "current ans=".$currentanswer;
-	//echo "HEREEEEE";
-		    
-$result .= html_writer::tag('div', get_string('youranswer', 'qtype_easyonewman', ''), array('class' => 'qtext'));
-
-$answer = $question->get_correct_response();
-
-///buttons to show correct and user answers
-		$result .= html_writer::tag('textarea', $qa->get_last_qt_var('answer'), array('id' => $myanswer_id, 'name' => 'my_answer', 'style' => 'display:none;'));
-
-		$result .= html_writer::tag('textarea', $answer['answer'], array('id' => $correctanswer_id, 'name' => 'correct_answer', 'style' => 'display:none;'));
-
-
-		}
+        }
 
         $result .= html_writer::tag('div',
                                     $this->hidden_fields($qa),
                                     array('class' => 'inputcontrol')); 
 
-	if($options->readonly){
-	//$result .= file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_readonly.html');
+        if($options->readonly){
 
-	//$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_readonly.html');
-	//$temp = str_replace("slot", $qa->get_slot(), $temp);
-	//$result .= $temp;
-		if($stagoreclip==0){
-		$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_readonly.html');
-		$temp = str_replace("slot", $qa->get_slot(), $temp);
-		$result .= $temp;
-		}else{
-		$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_readonly_eclip.html');
-		$temp = str_replace("slot", $qa->get_slot(), $temp);
-		$result .= $temp;
-		}
-	
+                if ($stagoreclip == 0) {  // Staggered.
+
+ 		$result .= html_writer::start_tag('div', array('id' => 'divnew'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos1'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos2'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos3'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos4'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'.$qa->get_slot()));
+		$result .= html_writer::end_tag('div');  // End divnew!
+                $result .= html_writer::empty_tag('br', array('class' => 'cleared'));
+              
+                } else {
+
+
+		$result .= html_writer::start_tag('div', array('id' => 'divneweclip'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos1'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos2'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos3'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos4'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'.$qa->get_slot()));
+		$result .= html_writer::end_tag('div');  // End divnew!
+                $result .= html_writer::empty_tag('br', array('class' => 'cleared'));
+
+/*
+                $temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_readonly_eclip.html');
+                $temp = str_replace("slot", $qa->get_slot(), $temp);
+                $result .= $temp;   */
+                }
+        
+                
+        } else {
+
+                if ($stagoreclip == 0) {  // Staggered!
+		//$result .= html_writer::start_tag('html');
+                //$result .= html_writer::start_tag('div');
+ 		$result .= html_writer::start_tag('div', array('id' => 'divnew'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos1'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos2'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos3'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos4'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'.$qa->get_slot()));
+		$result .= html_writer::end_tag('div');  // End divnew!
+
 		
-	}
-	else{
 
 
-		if($stagoreclip==0){
-		$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman.html');
-		$temp = str_replace("slot", $qa->get_slot(), $temp);
-		$result .= $temp;
-
-		}else{
-		$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_eclip.html');
-		$temp = str_replace("slot", $qa->get_slot(), $temp);
-		$result .= $temp;
-		}
-
-		$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_dragable.html');
-		$temp = str_replace("slot", $qa->get_slot(), $temp);
-		$result .= $temp;
+//		$result .= html_writer::end_tag('div');
+/*
+                $temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman.html');
+                $temp = str_replace("slot", $qa->get_slot(), $temp);
+                $result .= $temp;
+*/
+                } else {    // Eclipsed!
 
 
-	}
+		$result .= html_writer::start_tag('div', array('id' => 'divneweclip'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos1'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos2'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos3'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos4'.$qa->get_slot()));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'.$qa->get_slot()));
+		$result .= html_writer::end_tag('div');  // End divnew!
+
+
+                /*$temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_eclip.html');
+                $temp = str_replace("slot", $qa->get_slot(), $temp);
+                $result .= $temp; */
+                }
+                
+
+
+                $temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_dragable.html');
+                $temp = str_replace("slot", $qa->get_slot(), $temp);
+                $result .= $temp;
+
+                $this->page->requires->js_init_call('M.qtype_easyonewman.dragndrop', array($qa->get_slot()));
+
+/*                $jsmodule = array(
+                          'name'     => 'qtype_easyonewman',
+                          'fullpath' => '/question/type/easyonewman/module.js',
+                          'requires' => array(),
+                          'strings' => array(
+                          array('enablejava', 'qtype_easyonewman')
+                          )
+                          );
+
+                $PAGE->requires->js_init_call('M.qtype_easyonewman3.dragndrop',
+                                      array($qa->get_slot()),
+                                      false,
+                                      $jsmodule);  */
+        }
+
+
+                // Hidden fields to save data.
+                $result .= html_writer::empty_tag('input', array('id' => 'apos0'.$qa->get_slot(), 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos1'.$qa->get_slot(), 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos2'.$qa->get_slot(), 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos3'.$qa->get_slot(), 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos4'.$qa->get_slot(), 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos5'.$qa->get_slot(), 'type' => 'hidden'));
+
+
 
         $this->require_js($qa, $options->readonly, $options->correctness);
 
         return $result;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // protected function require_js($toreplaceid, question_attempt $qa, $readonly, $correctness, $appletoptions) {
 
     protected function require_js(question_attempt $qa, $readonly, $correctness) {
         global $PAGE;
@@ -224,21 +239,21 @@ $answer = $question->get_correct_response();
         );
         $topnode = 'div.que.easyonewman#q'.$qa->get_slot();
         //$appleturl = new moodle_url('appletlaunch.jar');
-	
+        
         if ($correctness) {
             $feedbackimage = $this->feedback_image($this->fraction_for_last_response($qa));
         } else {
             $feedbackimage = '';
         }
-	//echo "HHHHEREEEEERREE";
+        //echo "HHHHEREEEEERREE";
         //$name = 'easyonewman'.$qa->get_slot();
         //$appletid = 'easyonewman'.$qa->get_slot();
-	$stripped_answer_id="stripped_answer".$qa->get_slot();
+        $stripped_answer_id="stripped_answer".$qa->get_slot();
         $PAGE->requires->js_init_call('M.qtype_easyonewman.insert_easyonewman_applet',
                                       array($topnode,
                                             $feedbackimage,
                                             $readonly,
-					    $stripped_answer_id,$qa->get_slot()),
+                                            $stripped_answer_id,$qa->get_slot()),
                                       false,
                                       $jsmodule);
     }
@@ -290,10 +305,7 @@ $answer = $question->get_correct_response();
             return '';
         }
 
-//        return get_string('correctansweris', 'qtype_easyonewman', s($answer->answer));
         return get_string('correctansweris', 'qtype_easyonewman', s($answer->answer));
-
-
     }
 
     protected function hidden_fields(question_attempt $qa) {

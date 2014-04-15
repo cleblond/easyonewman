@@ -19,7 +19,7 @@
  *
  * @package    qtype
  * @subpackage easyonewman
- * @copyright  2007 Jamie Pratt
+ * @copyright  2014 onwards Carl LeBlond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,193 +27,158 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-/**
- * easyonewman question editing form definition.
- *
- * @copyright  2007 Jamie Pratt
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 require_once($CFG->dirroot . '/question/type/shortanswer/edit_shortanswer_form.php');
 
-
-/**
- * Calculated question type editing form definition.
- *
- * @copyright  2007 Jamie Pratt me@jamiep.org
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
 
     protected function definition_inner($mform) {
-		global $PAGE, $CFG, $question, $DB;
-		
-		$PAGE->requires->js('/question/type/easyonewman/easyonewman_script.js');
-		$PAGE->requires->css('/question/type/easyonewman/styles.css');
-               // $mform->addElement('hidden', 'usecase', 1);
-		if(isset($question->id)){
-		$record = $DB->get_record('question_easyonewman', array('question' => $question->id ));
-		$stagoreclip = $record->stagoreclip;
-		//echo $stagoreclip;
-		}
-		else{
-		$stagoreclip = 0;
-		}
-	//echo required_param('id',0);
-	
-	//echo $question->id;
-	//var_dump($question);
-	//echo required_param('stagoreclip', PARAM_INT);
+        global $PAGE, $CFG, $question, $DB;
+                
+        $PAGE->requires->js('/question/type/easyonewman/easyonewman_script.js');
+        $PAGE->requires->css('/question/type/easyonewman/styles.css');
 
-
+        if (isset($question->id)) {
+            $record = $DB->get_record('question_easyonewman', array('question' => $question->id ));
+            $stagoreclip = $record->stagoreclip;
+            //echo $stagoreclip;
+        } else {
+                $stagoreclip = 0;
+                }
         $mform->addElement('static', 'answersinstruct',
                 get_string('correctanswers', 'qtype_easyonewman'),
                 get_string('filloutoneanswer', 'qtype_easyonewman'));
         $mform->closeHeaderBefore('answersinstruct');
 
-
-
-	$menu = array(
+        $menu = array(
             get_string('staggered', 'qtype_easyonewman'),
-            get_string('eclipsed', 'qtype_easyonewman')	    
+            get_string('eclipsed', 'qtype_easyonewman')            
         );
         $mform->addElement('select', 'stagoreclip',
                 get_string('casestagoreclip', 'qtype_easyonewman'), $menu);
 
-
-
         $menu = array(
             get_string('caseconformfalse', 'qtype_easyonewman'),
-            get_string('caseconformtrue', 'qtype_easyonewman')	    
+            get_string('caseconformtrue', 'qtype_easyonewman')            
         );
         $mform->addElement('select', 'conformimportant',
                 get_string('caseconformimportant', 'qtype_easyonewman'), $menu);
 
-
-
         $menu = array(
             get_string('caseorientfalse', 'qtype_easyonewman'),
-            get_string('caseorienttrue', 'qtype_easyonewman')	    
+            get_string('caseorienttrue', 'qtype_easyonewman')            
         );
         $mform->addElement('select', 'orientimportant',
                 get_string('caseorientimportant', 'qtype_easyonewman'), $menu);
 
+        if ($stagoreclip == 1) {
+                $result = html_writer::start_tag('div', array('id' => 'divneweclip', 'style' => 'background-image: url(\'type/easyonewman/pix/eclip.png\');'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos1'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos2'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos3'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos4'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'));
+		$result .= html_writer::end_tag('div');  // End divnew!
 
- 
+                $easyonewmanbuildstring = $result;
 
+             //$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman_eclip.html').file_get_contents('type/easyonewman/newman_dragable.html');
 
+        } else {
+ 		$result = html_writer::start_tag('div', array('id' => 'divnew', 'style' => 'background-image: url(\'type/easyonewman/pix/stag.png\');'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos1'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos2'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos3'));
+		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos4'));
+		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'));
+		$result .= html_writer::end_tag('div');  // End divnew!
 
-
-
-
-		
-//		$appleturl = new moodle_url('/question/type/easyonewman/easyonewman/easyonewman.jar');
-
-
-		//get the html in the easyonewmanlib.php to build the applet
-//	    $easyonewmanbuildstring = "\n<applet code=\"easyonewman.class\" name=\"easyonewman\" id=\"easyonewman\" archive =\"$appleturl\" width=\"460\" height=\"335\">" .
-//	  "\n<param name=\"options\" value=\"" . $CFG->qtype_easyonewman_options . "\" />" .
-//      "\n" . get_string('javaneeded', 'qtype_easyonewman', '<a href="http://www.java.com">Java.com</a>') .
-//	  "\n</applet>";
-	//echo $data['stagoreclip'];
-
-	 if($stagoreclip == 1){
-$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman_eclip.html').file_get_contents('type/easyonewman/newman_dragable.html');
-	}
-	else{
-$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman.html').file_get_contents('type/easyonewman/newman_dragable.html');
-	}
-
-//echo "here".$easyonewmanbuildstring;
-
-	//echo $mform->get_data();
+                $easyonewmanbuildstring = $result;
 
 
+//$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman.html').file_get_contents('type/easyonewman/newman_dragable.html');
 
 
-        //output the marvin applet
-        //$mform->addElement('html', html_writer::start_tag('div', array('style'=>'width:650px;')));
-		//$mform->addElement('html', html_writer::start_tag('div', array('style'=>'float: right;font-style: italic ;')));
-		//$mform->addElement('html', html_writer::start_tag('small'));
-		//$easyonewmanhomeurl = 'http://www.easyochem.com';
-		//$mform->addElement('html', html_writer::link($easyonewmanhomeurl, get_string('easyonewmaneditor', 'qtype_easyonewman')));
-		//$mform->addElement('html', html_writer::empty_tag('br'));
-		//$mform->addElement('html', html_writer::tag('span', get_string('author', 'qtype_easyonewman'), array('class'=>'easyonewmanauthor')));
-		//$mform->addElement('html', html_writer::end_tag('small'));
-		//$mform->addElement('html', html_writer::end_tag('div'));
+        }
+        // Add the dragable div.
 
+        $easyonewmanbuildstring .= file_get_contents('type/easyonewman/newman_dragable.html');
 
-		//$mform->addElement('html', html_writer::start_tag('div', array('id'=>'newman_template')));
-		$mform->addElement('html',$easyonewmanbuildstring);
-		//$mform->addElement('html', html_writer::end_tag('div'));
+                 $result = html_writer::empty_tag('input', array('id' => 'apos0', 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos1', 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos2', 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos3', 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos4', 'type' => 'hidden'));
+                $result .= html_writer::empty_tag('input', array('id' => 'apos5', 'type' => 'hidden'));
+        // Add in the hidden inputs to hold answers
+        $easyonewmanbuildstring .= $result;
 
+        $mform->addElement('html',$easyonewmanbuildstring);
 
+        $jsmodule = array(
+                            'name'     => 'qtype_easyonewman',
+                            'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
+                            'requires' => array(),
+                            'strings' => array(
+                                array('enablejava', 'qtype_easyonewman')
+                            )
+                        );
 
-		//$mform->addElement('html', html_writer::end_tag('div'));
-
-			$jsmodule = array(
-			    'name'     => 'qtype_easyonewman',
-			    'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
-			    'requires' => array(),
-			    'strings' => array(
-				array('enablejava', 'qtype_easyonewman')
-			    )
-			);
-
-
-
-
-	    $htmlid=1;
- 	    $module = array('name'=>'easyonewman', 'fullpath'=>'/question/type/easyonewman/module.js', 'requires'=>array('yui2-treeview'));
-	    //$htmlid = 'private_files_tree_'.uniqid();
-            //$url = 'http://localhost/eolms/question/type/easyonewman/template_update.php?htmlid='+$htmlid;
-		$url = $CFG->wwwroot . '/question/type/easyonewman/template_update.php?stagoreclip=';
-            //$this->page->requires->js_init_call('M.block_ejsapp_file_browser.init_tree', array(false, $htmlid));
-            $PAGE->requires->js_init_call('M.qtype_easyonewman.init_reload', array($url, $htmlid),		
-                                      true,
-                                      $jsmodule);
-            $html = '<div id="'.$htmlid.'">';
-            //$html .= $this->htmllize_tree($tree, $tree->dir);
-            $html .= '</div>';
-
-
-
-
-
-
-
-
-
-///crl add structure to page
-
-
-
-
-	$PAGE->requires->js_init_call('M.qtype_easyonewman.insert_structure_into_applet',
-                                      array(),		
+        $htmlid=1;
+        
+        $url = $CFG->wwwroot . '/question/type/easyonewman/template_update.php?stagoreclip=';
+        
+        $PAGE->requires->js_init_call('M.qtype_easyonewman.init_reload', array($url, $htmlid),                
                                       true,
                                       $jsmodule);
 
+        //$html = '<div id="'.$htmlid.'">';
+        //$html .= '</div>';
 
+        $jsmodule = array(
+                            'name'     => 'qtype_easyonewman',
+                            'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
+                            'requires' => array(),
+                            'strings' => array(
+                                array('enablejava', 'qtype_easyonewman')
+                            )
+                        );
+
+
+
+        $PAGE->requires->js_init_call('M.qtype_easyonewman.insert_structure_into_applet',
+                                      array($stagoreclip),                
+                                      true,
+                                      $jsmodule);
 
 
         $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_easyonewman', '{no}'),
                 question_bank::fraction_options());
 
+        $PAGE->requires->js_init_call('M.qtype_easyonewman.dragndrop', array('1'), true, $jsmodule);
+
+        $PAGE->requires->js_init_call('M.qtype_easyonewman.init_getanswerstring', array($stagoreclip));
+
         $this->add_interactive_settings();
     }
-	
-	protected function get_per_answer_fields($mform, $label, $gradeoptions,
+        
+        protected function get_per_answer_fields($mform, $label, $gradeoptions,
             &$repeatedoptions, &$answersoption) {
-		
+                
         $repeated = parent::get_per_answer_fields($mform, $label, $gradeoptions,
                 $repeatedoptions, $answersoption);
-		
-		//construct the insert button
-//crl mrv		$scriptattrs = 'onClick = "getSmilesEdit(this.name, \'cxsmiles:u\')"';
-		$scriptattrs = 'onClick = "getSmilesEdit(this.name, \'cxsmiles\')"';
+                
+        //$scriptattrs = 'onClick = "getSmilesEdit(this.name, \'cxsmiles\')"';
+        //$insert_button = $mform->createElement('button','insert',get_string('insertfromeditor', 'qtype_easyonewman'),$scriptattrs);
+
+        $scriptattrs = 'class = id_insert';
+        $insert_button = $mform->createElement('button', 'insert', get_string('insertfromeditor',
+        'qtype_easyonewman'), $scriptattrs);
 
 
-        $insert_button = $mform->createElement('button','insert',get_string('insertfromeditor', 'qtype_easyonewman'),$scriptattrs);
+
+
         array_splice($repeated, 2, 0, array($insert_button));
 
         return $repeated;
