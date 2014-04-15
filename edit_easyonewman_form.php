@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 
@@ -33,17 +32,16 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
 
     protected function definition_inner($mform) {
         global $PAGE, $CFG, $question, $DB;
-                
+
         $PAGE->requires->js('/question/type/easyonewman/easyonewman_script.js');
         $PAGE->requires->css('/question/type/easyonewman/styles.css');
 
         if (isset($question->id)) {
             $record = $DB->get_record('question_easyonewman', array('question' => $question->id ));
             $stagoreclip = $record->stagoreclip;
-            //echo $stagoreclip;
         } else {
                 $stagoreclip = 0;
-                }
+        }
         $mform->addElement('static', 'answersinstruct',
                 get_string('correctanswers', 'qtype_easyonewman'),
                 get_string('filloutoneanswer', 'qtype_easyonewman'));
@@ -51,72 +49,74 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
 
         $menu = array(
             get_string('staggered', 'qtype_easyonewman'),
-            get_string('eclipsed', 'qtype_easyonewman')            
+            get_string('eclipsed', 'qtype_easyonewman')
         );
         $mform->addElement('select', 'stagoreclip',
                 get_string('casestagoreclip', 'qtype_easyonewman'), $menu);
 
         $menu = array(
             get_string('caseconformfalse', 'qtype_easyonewman'),
-            get_string('caseconformtrue', 'qtype_easyonewman')            
+            get_string('caseconformtrue', 'qtype_easyonewman')
         );
         $mform->addElement('select', 'conformimportant',
                 get_string('caseconformimportant', 'qtype_easyonewman'), $menu);
 
         $menu = array(
             get_string('caseorientfalse', 'qtype_easyonewman'),
-            get_string('caseorienttrue', 'qtype_easyonewman')            
+            get_string('caseorienttrue', 'qtype_easyonewman')
         );
         $mform->addElement('select', 'orientimportant',
                 get_string('caseorientimportant', 'qtype_easyonewman'), $menu);
 
         if ($stagoreclip == 1) {
-                $result = html_writer::start_tag('div', array('id' => 'divneweclip', 'style' => 'background-image: url(\'type/easyonewman/pix/eclip.png\');'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'));
-		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos1'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos2'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'epos3'));
-		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos4'));
-		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'));
-		$result .= html_writer::end_tag('div');  // End divnew!
-
-                $easyonewmanbuildstring = $result;
-
-             //$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman_eclip.html').file_get_contents('type/easyonewman/newman_dragable.html');
-
+            $result = html_writer::start_tag('div',
+                    array('id' => 'divneweclip', 'style' => 'background-image: url(\'type/easyonewman/pix/eclip.png\');'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'));
+            $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos1'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'epos2'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'epos3'));
+            $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos4'));
+            $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'));
+            $result .= html_writer::end_tag('div');  // End divnew!
+            $easyonewmanbuildstring = $result;
         } else {
- 		$result = html_writer::start_tag('div', array('id' => 'divnew', 'style' => 'background-image: url(\'type/easyonewman/pix/stag.png\');'));
-		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos1'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos2'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos3'));
-		$result .= html_writer::div('', 'dropablediv', array('id' => 'pos4'));
-		$result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'));
-		$result .= html_writer::end_tag('div');  // End divnew!
-
-                $easyonewmanbuildstring = $result;
-
-
-//$easyonewmanbuildstring=file_get_contents('type/easyonewman/edit_newman.html').file_get_contents('type/easyonewman/newman_dragable.html');
-
-
+            $result = html_writer::start_tag('div',
+                array('id' => 'divnew', 'style' => 'background-image: url(\'type/easyonewman/pix/stag.png\');'));
+            $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'pos1'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'pos2'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'pos3'));
+            $result .= html_writer::div('', 'dropablediv', array('id' => 'pos4'));
+            $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'));
+            $result .= html_writer::end_tag('div');  // End divnew!
+            $easyonewmanbuildstring = $result;
         }
         // Add the dragable div.
+            $easyonewmanbuildstring .= file_get_contents('type/easyonewman/newman_dragable.html');
+            $result = html_writer::empty_tag('input', array('id' => 'apos0', 'type' => 'hidden'));
+            $result .= html_writer::empty_tag('input', array('id' => 'apos1', 'type' => 'hidden'));
+            $result .= html_writer::empty_tag('input', array('id' => 'apos2', 'type' => 'hidden'));
+            $result .= html_writer::empty_tag('input', array('id' => 'apos3', 'type' => 'hidden'));
+            $result .= html_writer::empty_tag('input', array('id' => 'apos4', 'type' => 'hidden'));
+            $result .= html_writer::empty_tag('input', array('id' => 'apos5', 'type' => 'hidden'));
+        // Add in the hidden inputs to hold answers.
+            $easyonewmanbuildstring .= $result;
+            $mform->addElement('html', $easyonewmanbuildstring);
+            $jsmodule = array(
+                            'name'     => 'qtype_easyonewman',
+                            'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
+                            'requires' => array(),
+                            'strings' => array(
+                                array('enablejava', 'qtype_easyonewman')
+                            )
+                        );
+            $htmlid = 1;
+            $url = $CFG->wwwroot . '/question/type/easyonewman/template_update.php?stagoreclip=';
+            $PAGE->requires->js_init_call('M.qtype_easyonewman.init_reload', array($url, $htmlid),
+                                      true,
+                                      $jsmodule);
 
-        $easyonewmanbuildstring .= file_get_contents('type/easyonewman/newman_dragable.html');
-
-                 $result = html_writer::empty_tag('input', array('id' => 'apos0', 'type' => 'hidden'));
-                $result .= html_writer::empty_tag('input', array('id' => 'apos1', 'type' => 'hidden'));
-                $result .= html_writer::empty_tag('input', array('id' => 'apos2', 'type' => 'hidden'));
-                $result .= html_writer::empty_tag('input', array('id' => 'apos3', 'type' => 'hidden'));
-                $result .= html_writer::empty_tag('input', array('id' => 'apos4', 'type' => 'hidden'));
-                $result .= html_writer::empty_tag('input', array('id' => 'apos5', 'type' => 'hidden'));
-        // Add in the hidden inputs to hold answers
-        $easyonewmanbuildstring .= $result;
-
-        $mform->addElement('html',$easyonewmanbuildstring);
-
-        $jsmodule = array(
+            $jsmodule = array(
                             'name'     => 'qtype_easyonewman',
                             'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
                             'requires' => array(),
@@ -125,62 +125,27 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
                             )
                         );
 
-        $htmlid=1;
-        
-        $url = $CFG->wwwroot . '/question/type/easyonewman/template_update.php?stagoreclip=';
-        
-        $PAGE->requires->js_init_call('M.qtype_easyonewman.init_reload', array($url, $htmlid),                
+            $PAGE->requires->js_init_call('M.qtype_easyonewman.insert_structure_into_applet',
+                                      array($stagoreclip),
                                       true,
                                       $jsmodule);
 
-        //$html = '<div id="'.$htmlid.'">';
-        //$html .= '</div>';
-
-        $jsmodule = array(
-                            'name'     => 'qtype_easyonewman',
-                            'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
-                            'requires' => array(),
-                            'strings' => array(
-                                array('enablejava', 'qtype_easyonewman')
-                            )
-                        );
-
-
-
-        $PAGE->requires->js_init_call('M.qtype_easyonewman.insert_structure_into_applet',
-                                      array($stagoreclip),                
-                                      true,
-                                      $jsmodule);
-
-
-        $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_easyonewman', '{no}'),
+            $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_easyonewman', '{no}'),
                 question_bank::fraction_options());
-
-        $PAGE->requires->js_init_call('M.qtype_easyonewman.dragndrop', array('1'), true, $jsmodule);
-
-        $PAGE->requires->js_init_call('M.qtype_easyonewman.init_getanswerstring', array($stagoreclip));
-
-        $this->add_interactive_settings();
+            $PAGE->requires->js_init_call('M.qtype_easyonewman.dragndrop', array('1'), true, $jsmodule);
+            $PAGE->requires->js_init_call('M.qtype_easyonewman.init_getanswerstring', array($stagoreclip));
+            $this->add_interactive_settings();
     }
-        
-        protected function get_per_answer_fields($mform, $label, $gradeoptions,
+
+    protected function get_per_answer_fields($mform, $label, $gradeoptions,
             &$repeatedoptions, &$answersoption) {
-                
+
         $repeated = parent::get_per_answer_fields($mform, $label, $gradeoptions,
                 $repeatedoptions, $answersoption);
-                
-        //$scriptattrs = 'onClick = "getSmilesEdit(this.name, \'cxsmiles\')"';
-        //$insert_button = $mform->createElement('button','insert',get_string('insertfromeditor', 'qtype_easyonewman'),$scriptattrs);
-
         $scriptattrs = 'class = id_insert';
-        $insert_button = $mform->createElement('button', 'insert', get_string('insertfromeditor',
+        $insertbutton = $mform->createElement('button', 'insert', get_string('insertfromeditor',
         'qtype_easyonewman'), $scriptattrs);
-
-
-
-
-        array_splice($repeated, 2, 0, array($insert_button));
-
+        array_splice($repeated, 2, 0, array($insertbutton));
         return $repeated;
     }
 

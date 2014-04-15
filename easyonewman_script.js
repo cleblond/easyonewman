@@ -71,7 +71,7 @@ M.qtype_easyonewman={
 		elem.setAttribute("height", "30");
 		elem.setAttribute("width", "40");
 		document.getElementById(idhand+i).appendChild(elem);
-		//document.getElementById("apos"+i).value=group;
+		document.getElementById("apos"+i).value=group;
 
 		}
 
@@ -174,11 +174,11 @@ YUI().use('dd-drag', 'dd-constrain', 'dd-proxy', 'dd-drop', function(Y) {
             drag = e.drag.get('node');
             drop.get('childNodes').remove();
             drop.appendChild(drag);
-            //var idhand = drop.get('id');
-            //if(idhand.charAt(0) === 'e'){
-            //var idhand = idhand.substr(1);
-	    //}
-            //document.getElementById('a'+idhand).value=drag.get('id');
+            var idhand = drop.get('id');
+            if(idhand.charAt(0) === 'e'){
+            var idhand = idhand.substr(1);
+	    }
+            document.getElementById('a'+idhand).value=drag.get('id');
         
     });
     
