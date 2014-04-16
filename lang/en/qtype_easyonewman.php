@@ -26,19 +26,19 @@
 
 $string['caseconformtrue'] = 'True';
 $string['caseconformfalse'] = 'False';
-$string['caseconformimportant'] = '<b>Conformation Important</b><br/>Is the conformation important?  If "True" then a specific conformation must be drawn.  (e.g. Draw butane in its gauche conformation)';
-
+$string['caseconformimportant'] = 'Conformation Important';
+$string['conformimportantmore'] = '<h3>Is the conformation important?</h3><strong>If "True" then a specific conformation must be drawn.  (e.g. Draw butane in a gauche conformation?)</strong>';
 
 $string['staggered'] = 'Staggered';
 $string['eclipsed'] = 'Eclipsed';
-$string['casestagoreclip'] = '<b>Staggered/Eclipsed</b><br/>Do you want a Staggered or Eclipsed template problem?';
-
-
+$string['casestagoreclip'] = 'Staggered/Eclipsed';
+$string['stagoreclipmore'] = '<h3>Do you want a Staggered or Eclipsed template problem?</h3>';
+$string['newmaninstruct'] = '<h3>Build structure below by dragging/dropping groups onto template.</h3>';
+$string['newmaninstructstud'] = '<b>Build structure below by dragging/dropping groups onto template.</b>';
 $string['caseorienttrue'] = 'True';
 $string['caseorientfalse'] = 'False';
-$string['caseorientimportant'] = '<b>Perspective Important?:</b><br/>Is the perspective important?  If "True" then the student must draw the molecule from a certain perspective! (e.g Draw 2-methylbutane looking up the C2-C3 bond?';
-
-
+$string['caseorientimportant'] = 'Perspective Important';
+$string['orientimportantmore'] = '<h3>Is the perspective or direction of view important?</h3>If "True" then the student must draw the molecule from a certain perspective! (e.g Draw 2-methylbutane looking up the C2-C3 bond?';
 
 $string['addmoreanswerblanks'] = 'Blanks for {no} More Answers';
 $string['answermustbegiven'] = 'You must enter an answer if there is a grade or feedback.';
@@ -67,7 +67,7 @@ $string['instructions'] = '';
 $string['answer'] = 'Answer: {$a}';
 $string['youranswer'] = 'Your answer: {$a}';
 $string['correctansweris'] = 'The correct answer is: {$a}.';
-$string['correctanswers'] = '<b>Instructions</b>';
+$string['instructions'] = '<b>Instructions</b>';
 $string['notenoughanswers'] = 'This type of question requires at least {$a} answers';
 $string['pleaseenterananswer'] = 'Please enter an answer.';
 $string['easyonewmaneditor'] = 'EasyOChem Newman Editor';

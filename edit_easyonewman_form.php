@@ -43,7 +43,7 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
                 $stagoreclip = 0;
         }
         $mform->addElement('static', 'answersinstruct',
-                get_string('correctanswers', 'qtype_easyonewman'),
+                get_string('instructions', 'qtype_easyonewman'),
                 get_string('filloutoneanswer', 'qtype_easyonewman'));
         $mform->closeHeaderBefore('answersinstruct');
 
@@ -51,6 +51,8 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
             get_string('staggered', 'qtype_easyonewman'),
             get_string('eclipsed', 'qtype_easyonewman')
         );
+
+        $mform->addElement('html', '<strong>'.get_string('stagoreclipmore', 'qtype_easyonewman').'</strong>');
         $mform->addElement('select', 'stagoreclip',
                 get_string('casestagoreclip', 'qtype_easyonewman'), $menu);
 
@@ -58,6 +60,7 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
             get_string('caseconformfalse', 'qtype_easyonewman'),
             get_string('caseconformtrue', 'qtype_easyonewman')
         );
+        $mform->addElement('html', '<strong>'.get_string('conformimportantmore', 'qtype_easyonewman').'</strong>');
         $mform->addElement('select', 'conformimportant',
                 get_string('caseconformimportant', 'qtype_easyonewman'), $menu);
 
@@ -65,8 +68,11 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
             get_string('caseorientfalse', 'qtype_easyonewman'),
             get_string('caseorienttrue', 'qtype_easyonewman')
         );
+        $mform->addElement('html', '<strong>'.get_string('orientimportantmore', 'qtype_easyonewman').'</strong>');
         $mform->addElement('select', 'orientimportant',
                 get_string('caseorientimportant', 'qtype_easyonewman'), $menu);
+
+        $mform->addElement('html', '<strong>'.get_string('newmaninstruct', 'qtype_easyonewman').'</strong>');
 
         $result = html_writer::start_tag('div', array('id' => 'newman_template'));
         if ($stagoreclip == 1) {

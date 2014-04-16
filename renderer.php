@@ -128,6 +128,7 @@ class qtype_easyonewman_renderer extends qtype_renderer {
                 $result .= html_writer::empty_tag('br', array('class' => 'cleared'));
             }
         } else {
+                $result .= html_writer::div(get_string('newmaninstructstud', 'qtype_easyonewman'), 'instructions', array());
             if ($stagoreclip == 0) {  // Staggered!
                 $result .= html_writer::start_tag('div', array('id' => 'divnew'));
                 $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos0'.$qa->get_slot()));
