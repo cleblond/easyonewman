@@ -38,8 +38,4 @@ class qtype_easyonewman extends qtype_shortanswer {
     public function questionid_column_name() {
         return 'question';
     }
-
-    protected function initialise_question_instance(question_definition $question, $questiondata) {
-        parent::initialise_question_instance($question, $questiondata);
-    }
 }

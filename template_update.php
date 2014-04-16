@@ -28,7 +28,6 @@ require_login(0, false);
 global $OUTPUT;
 $stagoreclip = required_param('stagoreclip', PARAM_TEXT);
 if ($stagoreclip == 1) {
-
     $result = html_writer::start_tag('div',
                     array('id' => 'divneweclip', 'style' => 'background-image: url(\'type/easyonewman/pix/eclip.png\');'));
     $result .= html_writer::div('', 'dropablediv', array('id' => 'epos0'));
@@ -39,8 +38,6 @@ if ($stagoreclip == 1) {
     $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'epos5'));
     $result .= html_writer::end_tag('div');  // End divnew!
     $easyonewmanbuildstring = $result;
-//    $easyonewmanbuildstring = file_get_contents('edit_newman_eclip.html').file_get_contents('newman_dragable.html');
-
 } else {
 
     $result = html_writer::start_tag('div',
@@ -53,8 +50,6 @@ if ($stagoreclip == 1) {
     $result .= html_writer::div('', 'dropablediv flipable', array('id' => 'pos5'));
     $result .= html_writer::end_tag('div');  // End divnew!
     $easyonewmanbuildstring = $result;
-
-//    $easyonewmanbuildstring = file_get_contents('edit_newman.html').file_get_contents('newman_dragable.html');
 }
 
 // Add in the dragable div now and echo out.

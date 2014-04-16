@@ -109,17 +109,20 @@ class qtype_easyonewman_question extends qtype_shortanswer_question {
         return 0;
     }
 
-
     public function check_conform_not_important($usr, $cor) {
         // Split arrays into front(odd) and back(even).
         $corodd = array();
         $coreven = array();
         $both = array(&$coreven, &$corodd);
-        array_walk($cor, function($v, $k) use ($both) { $both[$k % 2][] = $v;});
+        array_walk($cor, function($v, $k) use ($both) {
+            $both[$k % 2][] = $v;
+        });
         $usrodd = array();
         $usreven = array();
         $both = array(&$usreven, &$usrodd);
-        array_walk($usr, function($v, $k) use ($both) { $both[$k % 2][] = $v; });
+        array_walk($usr, function($v, $k) use ($both) {
+            $both[$k % 2][] = $v;
+        });
         $oddflag = false;
         $evenflag = false;
         // Check (even).
