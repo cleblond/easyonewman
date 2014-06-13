@@ -14,6 +14,28 @@ M.qtype_easyonewman = {
             Y.one(topnode + ' input.mol').set('value', orderstring);
         }, this);
     },
+    insert_structure_into_applet: function(Y, stagoreclip) {
+        var textfieldid = 'id_answer_0';
+        if (document.getElementById(textfieldid).value != '') {
+            var idhand = 'pos';
+            if (stagoreclip == '1') {
+                idhand = 'epos';
+            }
+            var s = document.getElementById(textfieldid).value;
+            var groups = s.split("-");
+            for (var i = 0; i < 6; i++) {
+                var elem = document.createElement("img");
+                group = groups[i];
+                trimgroup = group.substring(0, group.length - 1);
+                elem.setAttribute("src", "type/easyonewman/pix/" + trimgroup + ".png");
+                elem.setAttribute("id", group + i);
+                elem.setAttribute("height", "30");
+                elem.setAttribute("width", "40");
+                document.getElementById(idhand + i).appendChild(elem);
+                document.getElementById("apos" + i).value = group;
+            }
+        }
+    }
 }
 M.qtype_easyonewman2 = {
     insert_structure_into_applet: function(Y, slot, moodleroot, stagoreclip) {
@@ -193,6 +215,62 @@ M.qtype_easyonewman.dragndrop = function(Y, slot) {
             var tar = new Y.DD.Drop({
                 node: v
             });
+        });
+    });
+};
+
+M.qtype_easyonewman.init_reload = function(Y, url, htmlid) {
+    var handleSuccess = function(o) {
+            newman_template.innerHTML = o.responseText;
+            M.qtype_easyonewman.insert_structure_into_applet(Y, document.getElementById('id_stagoreclip').value);
+            //div.innerHTML = "<li>JARL!!!</li>";
+        }
+    var handleFailure = function(o) { /*failure handler code*/
+        }
+    var callback = {
+        success: handleSuccess,
+        failure: handleFailure
+    }
+    var button = Y.one("#id_stagoreclip");
+    button.on("change", function(e) {
+        div = Y.YUI2.util.Dom.get(htmlid);
+        Y.use('yui2-connection', function(Y) {
+            newurl = url + document.getElementById('id_stagoreclip').value;
+            Y.YUI2.util.Connect.asyncRequest('GET', newurl, callback);
+        });
+    });
+};
+
+
+M.qtype_easyonewman.init_getanswerstring = function(Y, stagoreclip) {
+    var handleSuccess = function(o) {};
+    var handleFailure = function(o) { /*failure handler code*/
+        };
+    var callback = {
+        success: handleSuccess,
+        failure: handleFailure
+    };
+    Y.all(".id_insert").each(function(node) {
+        node.on("click", function() {
+            var idhand = 'pos';
+            if (stagoreclip === '1') {
+                idhand = 'epos';
+            }
+            var pos0 = document.getElementById('apos0').value;
+            var pos1 = document.getElementById('apos1').value;
+            var pos2 = document.getElementById('apos2').value;
+            var pos3 = document.getElementById('apos3').value;
+            var pos4 = document.getElementById('apos4').value;
+            var pos5 = document.getElementById('apos5').value;
+            pos0 = pos0.substring(0, pos0.length - 1) + '6';
+            pos1 = pos1.substring(0, pos1.length - 1) + '6';
+            pos2 = pos2.substring(0, pos2.length - 1) + '6';
+            pos3 = pos3.substring(0, pos3.length - 1) + '6';
+            pos4 = pos4.substring(0, pos4.length - 1) + '6';
+            pos5 = pos5.substring(0, pos5.length - 1) + '6';
+            var buttonid = node.getAttribute("id");
+            textfieldid = 'id_answer_' + buttonid.substr(buttonid.length - 1);
+            document.getElementById(textfieldid).value = pos0 + "-" + pos1 + "-" + pos2 + "-" + pos3 + "-" + pos4 + "-" + pos5;
         });
     });
 };

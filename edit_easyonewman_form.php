@@ -33,7 +33,7 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
     protected function definition_inner($mform) {
         global $PAGE, $CFG, $question, $DB;
 
-        $PAGE->requires->js('/question/type/easyonewman/easyonewman_script.js');
+        //$PAGE->requires->js('/question/type/easyonewman/easyonewman_script.js');
         $PAGE->requires->css('/question/type/easyonewman/styles.css');
 
         if (isset($question->id)) {
@@ -109,37 +109,35 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
 
             $easyonewmanbuildstring = $result;
             $mform->addElement('html', $easyonewmanbuildstring);
-            $jsmodule = array(
+    /*        $jsmodule = array(
                             'name'     => 'qtype_easyonewman',
                             'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
                             'requires' => array(),
                             'strings' => array(
                                 array('enablejava', 'qtype_easyonewman')
                             )
-                        );
+                        ); */
             $htmlid = 1;
             $url = $CFG->wwwroot . '/question/type/easyonewman/template_update.php?stagoreclip=';
             $PAGE->requires->js_init_call('M.qtype_easyonewman.init_reload', array($url, $htmlid),
-                                      true,
-                                      $jsmodule);
+                                      true);
 
-            $jsmodule = array(
+ /*           $jsmodule = array(
                             'name'     => 'qtype_easyonewman',
                             'fullpath' => '/question/type/easyonewman/easyonewman_script.js',
                             'requires' => array(),
                             'strings' => array(
                                 array('enablejava', 'qtype_easyonewman')
                             )
-                        );
+                        ); */
 
             $PAGE->requires->js_init_call('M.qtype_easyonewman.insert_structure_into_applet',
                                       array($stagoreclip),
-                                      true,
-                                      $jsmodule);
+                                      true);
 
             $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_easyonewman', '{no}'),
                 question_bank::fraction_options());
-            $PAGE->requires->js_init_call('M.qtype_easyonewman.dragndrop', array('1'), true, $jsmodule);
+            $PAGE->requires->js_init_call('M.qtype_easyonewman.dragndrop', array('1'), true);
             $PAGE->requires->js_init_call('M.qtype_easyonewman.init_getanswerstring', array($stagoreclip));
             $this->add_interactive_settings();
     }
