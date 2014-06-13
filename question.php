@@ -62,16 +62,42 @@ class qtype_easyonewman_question extends qtype_shortanswer_question {
             }
         } else if ($orientimportant == 0) { // Orientation not important.
             if ($conformimportant == 1) {  // Conformation important.
+                echo "Here";
                 // Check from front.
                 $returnflag1 = $this->check_conform_important($usrtemp, $cor);
-                $usrtemp = array_reverse($usr);
+                //Check mirror image front.
+                //Make mirror image of usr response.
+                $temp = $usrtemp[0];
+                $usrtemp[0] = $usrtemp[2];
+                $usrtemp[2] = $temp;
+                $temp = $usrtemp[5];
+                $usrtemp[5] = $usrtemp[3];
+                $usrtemp[3] = $temp;
+                $returnflag3 = $this->check_conform_important($usrtemp, $cor);
+                        
                 // Check from back.
+                $usrtemp = array_reverse($usr);
                 $returnflag2 = $this->check_conform_important($usrtemp, $cor);
-                if ($returnflag1 == 1 || $returnflag2 == 1) {
+                //Check mirror image front. 
+                //Make mirror image of usr response.
+                $temp = $usrtemp[0];
+                $usrtemp[0] = $usrtemp[2];
+                $usrtemp[2] = $temp;
+                $temp = $usrtemp[5];
+                $usrtemp[5] = $usrtemp[3];
+                $usrtemp[3] = $temp;
+                $returnflag3 = $this->check_conform_important($usrtemp, $cor);
+                
+                if ($returnflag1 == 1) {
+                    $returnflag = 1;
+                } else if ($returnflag2 == 1) {
+                    $returnflag = 1;
+                } else if ($returnflag3 == 1) {
                     $returnflag = 1;
                 } else {
                     $returnflag = 0;
                 }
+
             } else {
                 // Conformation not important.
                 $returnflag1 = $this->check_conform_not_important($usr, $cor);
