@@ -62,7 +62,6 @@ class qtype_easyonewman_question extends qtype_shortanswer_question {
             }
         } else if ($orientimportant == 0) { // Orientation not important.
             if ($conformimportant == 1) {  // Conformation important.
-                echo "Here";
                 // Check from front.
                 $returnflag1 = $this->check_conform_important($usrtemp, $cor);
                 //Check mirror image front.
