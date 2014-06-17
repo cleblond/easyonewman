@@ -50,6 +50,10 @@ clear: left;
 #divneweclip {background-color:#ffffff;}
 
 
+
+div[id*='dme'] {background-image: url([[pix:qtype_easyonewman|me]]);}
+
+
 div[id*='pos0'] {width:40px;height:30px;padding:0px;border:1px solid #aaaaaa; position:relative; top:40px; left:1px;}
 div[id*='pos1'] {width:40px;height:30px;padding:0px;border:1px solid #aaaaaa; position:relative; top:-30px; left:82px;}
 div[id*='pos2'] {width:40px;height:30px;padding:0px;border:1px solid #aaaaaa; position:relative; top:-25px; left:160px;}

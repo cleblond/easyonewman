@@ -150,6 +150,7 @@ class qtype_easyonewman_renderer extends qtype_renderer {
             }
             $temp = file_get_contents($CFG->dirroot .'/question/type/easyonewman/newman_dragable.html');
             $temp = str_replace("slot", $qa->get_slot(), $temp);
+            $temp = str_replace("moodleroot", $CFG->wwwroot, $temp);
             $result .= $temp;
             $this->page->requires->js_init_call('M.qtype_easyonewman.dragndrop', array($qa->get_slot()));
         }
