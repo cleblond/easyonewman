@@ -53,6 +53,9 @@ if ($stagoreclip == 1) {
 }
 
 // Add in the dragable div now and echo out.
-$easyonewmanbuildstring .= file_get_contents('newman_dragable.html');
+
+$temp = file_get_contents('newman_dragable.html');
+$temp = str_replace("moodleroot", $CFG->wwwroot, $temp);
+$easyonewmanbuildstring .= $temp;
 
 echo $easyonewmanbuildstring;
