@@ -97,7 +97,10 @@ class qtype_easyonewman_edit_form extends qtype_shortanswer_edit_form {
             $result .= html_writer::end_tag('div');  // End divnew!
         }
         // Add the dragable div.
-            $result .= file_get_contents('type/easyonewman/newman_dragable.html');
+        
+            $temp = file_get_contents('type/easyonewman/newman_dragable.html');
+            $temp = str_replace("moodleroot", $CFG->wwwroot, $temp);
+            $result .= $temp;
             $result .= html_writer::end_tag('div');  // End newman_template!
         // Add in the hidden inputs to hold answers.
             $result .= html_writer::empty_tag('input', array('id' => 'apos0', 'type' => 'hidden'));
